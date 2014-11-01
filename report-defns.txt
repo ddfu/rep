@@ -1,0 +1,49 @@
+{
+	"griffin":
+	{
+		"menu": [
+			{
+				"type": "dropdown",
+				"name": "Group",
+				"choices": [
+					"LDN IRP Flow"
+				]
+			},
+			{
+				"type": "check",
+				"name": "PV"
+			},
+			{
+				"type": "check",
+				"name": "IR Delta"
+			},
+			{
+				"type": "check",
+				"name": "Include ETI"
+			}
+		],
+	
+		"reports": 
+		{
+			"repa": {
+			},
+		
+			"repb": {
+			}
+		}
+	},
+	
+	"demo":
+	{
+		"menu": [
+			{
+				"type": "label",
+				"text": "No options yet"
+			}
+		],
+		
+		"reports":
+		{
+		}
+	}
+}
