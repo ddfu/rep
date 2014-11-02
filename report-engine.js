@@ -43,25 +43,48 @@ var rwEngine = new (function(){
 				div.attr( "class", "col-sm-6 col-md-6 col-lg-6" );
 		}
 		
+		/* Pivoter instance */
+		var pivoter = new ReportPivoter();
+		
 		/* First-time draw of report (post-configuration) */
 		var draw = function()
 		{
 			div.find( ".rw-report-progress" ).remove();
 			div.find( ".rw-report-body" ).html( templates.pivoter );
+			pivoter.installSlick( div.find( ".rw-report-slick" ) );
 		};
 		
 		/* Download data for report */
+		var data = {};
+		var columns = [];
+			
 		var load = function()
 		{
 			div.find( ".rw-report-configure" ).remove();
 			div.find( ".rw-report-progress" ).html( "<div>Loading data...</div><div class=\"progress\">\
-			  <div class=\"progress-bar progress-bar-striped active\" role=\"progressbar\" aria-valuenow=\"40\" \
-			  	aria-valuemin=\"0\" aria-valuemax=\"100\" style=\"width: 40%\">\
+			  <div class=\"progress-bar progress-bar-striped active\" role=\"progressbar\" style=\"width: 0%\">\
 			  </div>\
 			</div>" );
 			
-			// fake it up
-			window.setTimeout( draw, 500 );
+			var done = 0;
+			var progress = div.find( ".progress-bar" ).first();
+			
+			/* Fetch data files for all columns and hardcoded report currently */
+			columns = reportDefns[ type ].reports[ "default" ].columns;
+			
+			for( var col in columns )
+			{
+				$.get( col.data, function( d ){
+					data[ col.name ] = d;
+					done++;
+					progress.css( "width", Math.floor( done / columns.length * 100 ) + "%" );
+					if( done == columns.length )
+						draw();
+				} );
+			}
+			
+			if( !columns.length )
+				draw();
 		};
 		
 		this.load = load;
